@@ -6,39 +6,41 @@ import (
 	"net/http/httptest"
 )
 
-// Initialize is a method that initializes the API test instance.
-// It creates a new HTTP server and a new HTTP request multiplexer.
-// It also initializes the test cases and the configuration.
-// It takes a configuration as an argument.
+// Initialize creates a new instance of the API test
+// with the given configuration and the need to exit
+// the program after the test is done.
 //
 // Example:
 //
-//	instance := Instance
-//	config := Config{}
-//	instance.Initialize(config)
-func (h *Instance) Initialize(config *Config) {
+//	config := &Config{
+//		Level:        DefaultLevel,
+//		IsNeedResult: true,
+//	}
+//	instance := apitest.Initialize(config, true)
+func Initialize(config *Config, isNeedExit bool) *Instance {
 	if err := ValidateConfig(config); err != nil {
 		panic(err.Error())
-		return
+		return nil
 	}
 
 	mux := http.NewServeMux()
 	httptest.NewServer(mux)
 
-	h.Server = httptest.NewServer(mux)
-	h.Mux = mux
-	h.Cases = nil
-	h.Config = *config
+	return &Instance{
+		Server:           httptest.NewServer(mux),
+		Mux:              mux,
+		Cases:            &TestCases{},
+		Config:           *config,
+		TotalCases:       0,
+		TotalFailedCases: 0,
+		TotalPassedCases: 0,
+		IsNeedExit:       isNeedExit,
+	}
 }
 
-// Clean is a method that cleans up the API test instance.
-// It closes the HTTP server and sets the HTTP request multiplexer, test cases, and configuration to nil.
-//
-// Example:
-//
-//	instance := Instance
-//	/* initialize instance ... */
-//	instance.Clean()
+// Clean removes the instance of the API test.
+// It closes the server and sets the mux, cases, and
+// configuration to nil.
 func (h *Instance) Clean() {
 	h.Server.Close()
 	h.Mux = nil
@@ -46,37 +48,11 @@ func (h *Instance) Clean() {
 	h.Config = Config{}
 }
 
-// ValidateConfig is a method that validates the configuration.
-// It takes a configuration as an argument.
-// It returns true if the configuration is valid.
-//
-// Example:
-//
-//	config := Config{}
-//	valid := ValidateConfig(config)
+// ValidateConfig validates the given configuration.
+// It returns an error if the configuration is nil.
 func ValidateConfig(config *Config) error {
 	if config == nil {
 		return errors.New("config is nil")
-	}
-
-	if config.IsTerminalOutput && config.IsFileOutput {
-		return errors.New("both terminal and file output are enabled")
-	}
-
-	if config.IsFileOutput && config.FilePath == "" {
-		return errors.New("file path is empty")
-	}
-
-	switch config.Format {
-	case TableFormat:
-	case JSONFormat:
-		break
-	default:
-		return errors.New("invalid output format")
-	}
-
-	if config.IsFileOutput && config.ColoredTerminalOutput {
-		return errors.New("colored terminal output is enabled for file output")
 	}
 
 	return nil

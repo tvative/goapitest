@@ -8,6 +8,16 @@
 `goapitest` is a minimalist package to test RESTful APIs. It is designed to be simple and easy to use, with a focus on
 simplicity and minimalism.
 
+## Features
+
+- **Analyzed, Readable Output Generation**: Automatically generate detailed and easy-to-understand reports from test
+  results.
+- **Execution Time Monitoring**: Track and report the execution time of each test case.
+- **Performance Level Assessment**: Evaluate and document the performance metrics of the API.
+- **Test Case Type Definition**: Specify and categorize the type of each test case.
+- **Integration Testing Compatibility**: Ensure that the package supports seamless integration testing.
+- **API Test Automation Validation**: Provide features to validate and automate API testing processes efficiently.
+
 ## Usage
 
 ### Installation

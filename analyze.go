@@ -32,6 +32,13 @@ type analyzedResult struct {
 }
 
 // analyze is the function to analyze the test case
+//
+// The performance is calculated based on the response time of the test case.
+// - **Best**: Optimal performance, ideal user experience, and minimal latency. (Time Range: 0 - 100 ms)
+// - **Good**: Acceptable performance with minor delays, generally not noticeable to users. (Time Range: 100 - 300 ms)
+// - **Acceptable**: Noticeable delays, but still within acceptable limits for most users. (Time Range: 300 - 1000 ms (1s))
+// - **Poor**: Significant delays, negatively impacting user experience. (Time Range: 1 - 2 seconds)
+// - **Worst**: Unacceptable performance, leading to frustration and potential abandonment of the application. (Time Range: > 2 seconds)
 func (h *Instance) analyze(tc TestCases) analyzedResult {
 	var result analyzedResult
 	if tc.Case.ExpectedStatus != tc.StatusCodeGot {

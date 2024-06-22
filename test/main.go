@@ -16,7 +16,7 @@ func main() {
 		IsNeedResult: true,
 	}, true)
 
-	// Create a sample API
+	// Assign handlers
 	instance.Mux.HandleFunc("/hello", HelloHandler)
 
 	// Test cases

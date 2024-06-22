@@ -26,6 +26,14 @@ To use `goapitest`, you need to create a new instance of the `API` struct. The c
 ```go
 package main
 
+import (
+	"encoding/json"
+	"net/http"
+
+	"github.com/tvative/goapitest"
+)
+
+// Create a new instance of the API struct
 var instance *apitest.Instance
 
 func main() {

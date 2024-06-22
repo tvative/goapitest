@@ -10,86 +10,55 @@ import (
 	"time"
 )
 
-// TestCaseType is the type of test case.
+// TestCaseType is the type of test case
 type TestCaseType int
 
 const (
-	HappyPath       TestCaseType = iota // HappyPath means Happy path test case.
-	EdgeCase                            // EdgeCase means Edge case test case.
-	NegativeCase                        // NegativeCase means Negative case test case.
-	BoundaryCase                        // BoundaryCase means Boundary case test case.
-	CornerCase                          // CornerCase means Corner case test case.
-	StressCase                          // StressCase means Stress case test case.
-	SmokeCase                           // SmokeCase means Smoke case test case.
-	RegressionCase                      // RegressionCase means Regression case test case.
-	IntegrationCase                     // IntegrationCase means Integration case test case.
+	HappyPath       TestCaseType = iota // HappyPath is the happy path test case
+	EdgeCase                            // EdgeCase is the edge case test case
+	NegativeCase                        // NegativeCase is the negative case test case
+	BoundaryCase                        // BoundaryCase is the boundary case test case
+	CornerCase                          // CornerCase is the corner case test case
+	StressCase                          // StressCase is the stress case test case
+	SmokeCase                           // SmokeCase is the smoke case test case
+	RegressionCase                      // RegressionCase is the regression case test case
+	IntegrationCase                     // IntegrationCase is the integration case test case
 )
 
-// TestCasePerformance is the performance of the test case.
-type TestCasePerformance string
-
-const (
-	PerformanceWorst      TestCasePerformance = "Worst"      // PerformanceWorst means Low performance.
-	PerformancePoor                           = "Poor"       // PerformancePoor means Medium performance.
-	PerformanceAcceptable                     = "Acceptable" // PerformanceAcceptable means High performance.
-	PerformanceGood                           = "Good"       // PerformanceGood means No performance.
-	PerformanceBest                           = "Best"       // PerformanceBest means No performance.
-)
-
-// TestCase is a single test case
+// TestCase is the struct for test case
 type TestCase struct {
-	ID             string         // ID is the unique identifier for the test case.
-	Type           TestCaseType   // Type is the type of the test case.
-	Details        string         // Details is the description of the test case.
-	EndPoint       string         // EndPoint is the endpoint to test.
-	Method         string         // Method is the HTTP method to use.
-	Header         map[string]any // Header is the headers to send.
-	BodyType       string         // BodyType is the body type to send.
-	QueryParams    any            // QueryParams is the query parameters to send.
-	BodyParams     any            // BodyParams is the body parameters to send.
-	ExpectedResult string         // ExpectedResult is the expected result.
-	ExpectedStatus int            // ExpectedStatus is the expected HTTP status code.
-	IsIgnored      bool           // IsIgnored is whether the test case is ignored.
+	ID             string         // ID is the test case ID
+	Type           TestCaseType   // Type is the test case type
+	Details        string         // Details is the test case details
+	EndPoint       string         // EndPoint is the test case API endpoint
+	Method         string         // Method is the test case method
+	Header         map[string]any // Header is the test case header
+	BodyType       string         // BodyType is the test case body type
+	QueryParams    any            // QueryParams is the test case query parameters
+	BodyParams     any            // BodyParams is the test case body parameters
+	ExpectedResult string         // ExpectedResult is the test case expected result
+	ExpectedStatus int            // ExpectedStatus is the test case expected status code
+	IsIgnored      bool           // IsIgnored is the flag to ignore the test case
 }
 
-// TestCases is the result of a test case.
+// TestCases is the struct for test cases
 type TestCases struct {
-	ResultGot           string               // ResultGot is the result got from the test.
-	StatusGot           string               // StatusGot is the status got from the test.
-	StatusCodeGot       int                  // ResultGot is the status code got from the test.
-	ProtoGot            string               // ProtoGot is the protocol got from the test.
-	ProtoMajorGot       int                  // ProtoMajorGot is the major protocol version got from the test.
-	ProtoMinorGot       int                  // ProtoMinorGot is the minor protocol version got from the test.
-	ContentLengthGot    int64                // ContentLengthGot is the content length got from the test.
-	TransferEncodingGot []string             // TransferEncodingGot is the transfer encoding got from the test.
-	IsUncompressed      bool                 // IsUncompressed is whether the response is uncompressed.
-	TLSGot              *tls.ConnectionState // TLSGot is the TLS connection state got from the test.
-	Time                time.Duration        // Time is the time taken to run the test case.
-	Performance         TestCasePerformance  // Performance is the performance of the test case.
-	Case                TestCase             // Case is the test case.
-	Next                *TestCases           // Next is the next test case result.
+	ResultGot           string               // ResultGot is the test case result
+	StatusGot           string               // StatusGot is the test case status
+	StatusCodeGot       int                  // StatusCodeGot is the test case status code
+	ProtoGot            string               // ProtoGot is the test case protocol
+	ProtoMajorGot       int                  // ProtoMajorGot is the test case protocol major
+	ProtoMinorGot       int                  // ProtoMinorGot is the test case protocol minor
+	ContentLengthGot    int64                // ContentLengthGot is the test case content length
+	TransferEncodingGot []string             // TransferEncodingGot is the test case transfer encoding
+	IsUncompressed      bool                 // IsUncompressed is the flag to check if the test case is uncompressed
+	TLSGot              *tls.ConnectionState // TLSGot is the test case TLS connection state
+	Time                time.Duration        // Time is the test case time
+	Case                TestCase             // Case is the test case
+	Next                *TestCases           // Next is the next test case
 }
 
-func getPerformance(resTime time.Duration) TestCasePerformance {
-	if resTime < 100*time.Millisecond {
-		return PerformanceBest
-	}
-
-	if resTime >= 100*time.Millisecond && resTime < 300*time.Millisecond {
-		return PerformanceGood
-	}
-
-	if resTime >= 300*time.Millisecond && resTime < 1000*time.Millisecond {
-		return PerformanceAcceptable
-	}
-
-	if resTime >= 1000*time.Millisecond && resTime < 2000*time.Millisecond {
-		return PerformancePoor
-	}
-
-	return PerformanceWorst
-}
-
+// insert is the function to insert test case result
 func (h *TestCases) insert(result TestCases) error {
 	if result.Case.IsIgnored {
 		return nil
@@ -110,7 +79,15 @@ func (h *TestCases) insert(result TestCases) error {
 	return nil
 }
 
-// iterate returns a channel that will receive test case results one by one.
+// isEmptyNode is the function to check if the test case is empty
+func isEmptyNode(tc TestCases) bool {
+	return tc.ResultGot == "" && tc.StatusGot == "" && tc.StatusCodeGot == 0 &&
+		tc.ProtoGot == "" && tc.ProtoMajorGot == 0 && tc.ProtoMinorGot == 0 &&
+		tc.ContentLengthGot == 0 && len(tc.TransferEncodingGot) == 0 &&
+		!tc.IsUncompressed && tc.TLSGot == nil && tc.Time == 0
+}
+
+// iterate is the function to iterate the test cases
 func (h *TestCases) iterate() <-chan TestCases {
 	results := make(chan TestCases)
 	go func() {
@@ -126,14 +103,7 @@ func (h *TestCases) iterate() <-chan TestCases {
 	return results
 }
 
-// Add adds a test case to the configuration.
-//
-// Example:
-//
-//	instance := Instance
-//	/* initialize instance .. */
-//	testCase := TestCase{}
-//	instance.Add(testCase)
+// Add is the function to add test case
 func (h *Instance) Add(testCase TestCase) error {
 	var param = ""
 	var body io.Reader
@@ -212,7 +182,6 @@ func (h *Instance) Add(testCase TestCase) error {
 			IsUncompressed:      res.Uncompressed,
 			TLSGot:              res.TLS,
 			Time:                duration,
-			Performance:         getPerformance(duration),
 			Case:                testCase,
 			Next:                nil,
 		},

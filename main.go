@@ -1,3 +1,14 @@
+// GO API Testing Package
+//
+// Copyright (c) 2024 Tvative.
+// All rights reserved.
+//
+// Source code and its usage are governed by
+// the MIT license.
+
+// Package apitest is a package that provides the API test functionality.
+// It contains the main functions to initialize the API test, clean the instance,
+// and validate the configuration.
 package apitest
 
 import (

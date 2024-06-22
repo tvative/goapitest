@@ -1,3 +1,11 @@
+// GO API Testing Package
+//
+// Copyright (c) 2024 Tvative.
+// All rights reserved.
+//
+// Source code and its usage are governed by
+// the MIT license.
+
 package apitest
 
 import (

@@ -14,12 +14,12 @@ import (
 	"strings"
 )
 
-// dumpReadableHeader is the function to dump the readable headers
+// dumpReadableHeader is the function to dump the readable headers.
 func dumpReadableHeader() string {
 	return fmt.Sprintf("Running API testing...\n\n")
 }
 
-// dumpReadableFooter is the function to dump the readable footer
+// dumpReadableFooter is the function to dump the readable footer.
 func dumpReadableFooter(instance *Instance) string {
 	var output string
 	output = fmt.Sprintf("%-23s : %d\n", "total test cases", instance.TotalCases)
@@ -28,7 +28,7 @@ func dumpReadableFooter(instance *Instance) string {
 	return output
 }
 
-// dumpReadableItem is the function to dump the readable item
+// dumpReadableItem is the function to dump the readable item.
 func dumpReadableItem(tc TestCases, config Config, result analyzedResult) string {
 	var output string
 	if result.IsPassed {
@@ -66,12 +66,12 @@ func dumpReadableItem(tc TestCases, config Config, result analyzedResult) string
 	return output + "\n"
 }
 
-// dumpHeader is the function to dump the header
+// dumpHeader is the function to dump the header.
 func dumpHeader() string {
 	return dumpReadableHeader()
 }
 
-// dumpItems is the function to dump the items
+// dumpItems is the function to dump the items.
 func dumpItems(cases <-chan TestCases, instance *Instance) string {
 	var output = ""
 	for tc := range cases {
@@ -86,12 +86,12 @@ func dumpItems(cases <-chan TestCases, instance *Instance) string {
 	return output
 }
 
-// dumpFooter is the function to dump the footer
+// dumpFooter is the function to dump the footer.
 func dumpFooter(instance *Instance) string {
 	return dumpReadableFooter(instance)
 }
 
-// performOutput is the function to perform the output
+// performOutput is the function to perform the output.
 func performOutput(output string, instance *Instance) error {
 	fmt.Print(output)
 
@@ -105,8 +105,8 @@ func performOutput(output string, instance *Instance) error {
 }
 
 // Dump is the function to dump the test cases
-// in readable format
-// It will print the test cases to the console
+// in readable format.
+// It will print the test cases to the console.
 //
 // Example:
 //

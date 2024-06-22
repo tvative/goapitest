@@ -18,55 +18,55 @@ import (
 	"time"
 )
 
-// TestCaseType is the type of test case
+// TestCaseType is the type of test case.
 type TestCaseType int
 
 const (
-	HappyPath       TestCaseType = iota // HappyPath is the happy path test case
-	EdgeCase                            // EdgeCase is the edge case test case
-	NegativeCase                        // NegativeCase is the negative case test case
-	BoundaryCase                        // BoundaryCase is the boundary case test case
-	CornerCase                          // CornerCase is the corner case test case
-	StressCase                          // StressCase is the stress case test case
-	SmokeCase                           // SmokeCase is the smoke case test case
-	RegressionCase                      // RegressionCase is the regression case test case
-	IntegrationCase                     // IntegrationCase is the integration case test case
+	HappyPath       TestCaseType = iota // HappyPath is the happy path test case.
+	EdgeCase                            // EdgeCase is the edge case test case.
+	NegativeCase                        // NegativeCase is the negative case test case.
+	BoundaryCase                        // BoundaryCase is the boundary case test case.
+	CornerCase                          // CornerCase is the corner case test case.
+	StressCase                          // StressCase is the stress case test case.
+	SmokeCase                           // SmokeCase is the smoke case test case.
+	RegressionCase                      // RegressionCase is the regression case test case.
+	IntegrationCase                     // IntegrationCase is the integration case test case.
 )
 
-// TestCase is the struct for test case
+// TestCase is the struct for test case.
 type TestCase struct {
-	ID             string         // ID is the test case ID
-	Type           TestCaseType   // Type is the test case type
-	Details        string         // Details is the test case details
-	EndPoint       string         // EndPoint is the test case API endpoint
-	Method         string         // Method is the test case method
-	Header         map[string]any // Header is the test case header
-	BodyType       string         // BodyType is the test case body type
-	QueryParams    any            // QueryParams is the test case query parameters
-	BodyParams     any            // BodyParams is the test case body parameters
-	ExpectedResult string         // ExpectedResult is the test case expected result
-	ExpectedStatus int            // ExpectedStatus is the test case expected status code
-	IsIgnored      bool           // IsIgnored is the flag to ignore the test case
+	ID             string         // ID is the test case ID.
+	Type           TestCaseType   // Type is the test case type.
+	Details        string         // Details is the test case details.
+	EndPoint       string         // EndPoint is the test case API endpoint.
+	Method         string         // Method is the test case method.
+	Header         map[string]any // Header is the test case header.
+	BodyType       string         // BodyType is the test case body type.
+	QueryParams    any            // QueryParams is the test case query parameters.
+	BodyParams     any            // BodyParams is the test case body parameters.
+	ExpectedResult string         // ExpectedResult is the test case expected result.
+	ExpectedStatus int            // ExpectedStatus is the test case expected status code.
+	IsIgnored      bool           // IsIgnored is the flag to ignore the test case.
 }
 
-// TestCases is the struct for test cases
+// TestCases is the struct for test cases.
 type TestCases struct {
-	ResultGot           string               // ResultGot is the test case result
-	StatusGot           string               // StatusGot is the test case status
-	StatusCodeGot       int                  // StatusCodeGot is the test case status code
-	ProtoGot            string               // ProtoGot is the test case protocol
-	ProtoMajorGot       int                  // ProtoMajorGot is the test case protocol major
-	ProtoMinorGot       int                  // ProtoMinorGot is the test case protocol minor
-	ContentLengthGot    int64                // ContentLengthGot is the test case content length
-	TransferEncodingGot []string             // TransferEncodingGot is the test case transfer encoding
-	IsUncompressed      bool                 // IsUncompressed is the flag to check if the test case is uncompressed
-	TLSGot              *tls.ConnectionState // TLSGot is the test case TLS connection state
-	Time                time.Duration        // Time is the test case time
-	Case                TestCase             // Case is the test case
-	Next                *TestCases           // Next is the next test case
+	ResultGot           string               // ResultGot is the test case result.
+	StatusGot           string               // StatusGot is the test case status.
+	StatusCodeGot       int                  // StatusCodeGot is the test case status code.
+	ProtoGot            string               // ProtoGot is the test case protocol.
+	ProtoMajorGot       int                  // ProtoMajorGot is the test case protocol major.
+	ProtoMinorGot       int                  // ProtoMinorGot is the test case protocol minor.
+	ContentLengthGot    int64                // ContentLengthGot is the test case content length.
+	TransferEncodingGot []string             // TransferEncodingGot is the test case transfer encoding.
+	IsUncompressed      bool                 // IsUncompressed is the flag to check if the test case is uncompressed.
+	TLSGot              *tls.ConnectionState // TLSGot is the test case TLS connection state.
+	Time                time.Duration        // Time is the test case time.
+	Case                TestCase             // Case is the test case.
+	Next                *TestCases           // Next is the next test case.
 }
 
-// insert is the function to insert test case result
+// insert is the function to insert test case result.
 func (h *TestCases) insert(result TestCases) error {
 	if result.Case.IsIgnored {
 		return nil
@@ -87,7 +87,7 @@ func (h *TestCases) insert(result TestCases) error {
 	return nil
 }
 
-// isEmptyNode is the function to check if the test case is empty
+// isEmptyNode is the function to check if the test case is empty.
 func isEmptyNode(tc TestCases) bool {
 	return tc.ResultGot == "" && tc.StatusGot == "" && tc.StatusCodeGot == 0 &&
 		tc.ProtoGot == "" && tc.ProtoMajorGot == 0 && tc.ProtoMinorGot == 0 &&
@@ -95,7 +95,7 @@ func isEmptyNode(tc TestCases) bool {
 		!tc.IsUncompressed && tc.TLSGot == nil && tc.Time == 0
 }
 
-// iterate is the function to iterate the test cases
+// iterate is the function to iterate the test cases.
 func (h *TestCases) iterate() <-chan TestCases {
 	results := make(chan TestCases)
 	go func() {
@@ -111,7 +111,7 @@ func (h *TestCases) iterate() <-chan TestCases {
 	return results
 }
 
-// Add is the function to add test case
+// Add is the function to add test case.
 func (h *Instance) Add(testCase TestCase) error {
 	var param = ""
 	var body io.Reader

@@ -41,6 +41,10 @@ func Initialize(config *Config, isNeedExit bool) *Instance {
 // Clean removes the instance of the API test.
 // It closes the server and sets the mux, cases, and
 // configuration to nil.
+//
+// Example:
+//
+//	instance.Clean()
 func (h *Instance) Clean() {
 	h.Server.Close()
 	h.Mux = nil
@@ -50,6 +54,14 @@ func (h *Instance) Clean() {
 
 // ValidateConfig validates the given configuration.
 // It returns an error if the configuration is nil.
+//
+// Example:
+//
+//	config := &Config{
+//		Level:        DefaultLevel,
+//		IsNeedResult: true,
+//	}
+//	err := apitest.ValidateConfig(config)
 func ValidateConfig(config *Config) error {
 	if config == nil {
 		return errors.New("config is nil")

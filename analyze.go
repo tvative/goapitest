@@ -4,24 +4,26 @@ import (
 	"time"
 )
 
-// TestCasePerformance is the performance of the test case.
+// TestCasePerformance is the type of test case performance
 type TestCasePerformance string
 
 const (
-	PerformanceWorst      TestCasePerformance = "\033[1;31mWorst\033[0m"      // PerformanceWorst means Low performance.
-	PerformancePoor                           = "\033[1;35mPoor\033[0m"       // PerformancePoor means Medium performance.
-	PerformanceAcceptable                     = "\033[1;33mAcceptable\033[0m" // PerformanceAcceptable means High performance.
-	PerformanceGood                           = "\033[1;34mGood\033[0m"       // PerformanceGood means No performance.
-	PerformanceBest                           = "\033[1;32mBest\033[0m"       // PerformanceBest means No performance.
+	PerformanceWorst      TestCasePerformance = "\033[1;31mWorst\033[0m"      // PerformanceWorst is the worst performance and the color is red
+	PerformancePoor                           = "\033[1;35mPoor\033[0m"       // PerformancePoor is the poor performance and the color is magenta
+	PerformanceAcceptable                     = "\033[1;33mAcceptable\033[0m" // PerformanceAcceptable is the acceptable performance and the color is yellow
+	PerformanceGood                           = "\033[1;34mGood\033[0m"       // PerformanceGood is the good performance and the color is blue
+	PerformanceBest                           = "\033[1;32mBest\033[0m"       // PerformanceBest is the best performance and the color is green
 )
 
+// analyzedResult is the struct for analyzed result
 type analyzedResult struct {
-	IsPassed     bool
-	PassedStatus string
-	Performance  TestCasePerformance
-	Type         string
+	IsPassed     bool                // IsPassed is the flag to check if the test case is passed
+	PassedStatus string              // PassedStatus is the status of the test case
+	Performance  TestCasePerformance // Performance is the performance of the test case
+	Type         string              // Type is the type of the test case
 }
 
+// analyze is the function to analyze the test case
 func (h *Instance) analyze(tc TestCases) analyzedResult {
 	var result analyzedResult
 	if tc.Case.ExpectedStatus != tc.StatusCodeGot {
@@ -52,6 +54,7 @@ func (h *Instance) analyze(tc TestCases) analyzedResult {
 	return result
 }
 
+// getPerformance is the function to get the performance
 func getPerformance(resTime time.Duration) TestCasePerformance {
 	if resTime < 100*time.Millisecond {
 		return PerformanceBest
@@ -72,6 +75,7 @@ func getPerformance(resTime time.Duration) TestCasePerformance {
 	return PerformanceWorst
 }
 
+// getType is the function to get the type
 func getType(caseType TestCaseType) string {
 	switch caseType {
 	case HappyPath:

@@ -5,27 +5,28 @@ import (
 	"net/http/httptest"
 )
 
-// OutputFormat is an enumeration of the output formats.
-type OutputFormat int
+// OutputLevel is the type of output level
+type OutputLevel int
 
 const (
-	TableFormat = iota // TableFormat means the output format is table.
-	JSONFormat         // JSONFormat means the output format is JSON.
+	DefaultLevel = iota // DefaultLevel is the default output level
+	VerboseLevel        // VerboseLevel is the verbose output level
 )
 
-// Config is a struct that holds the configuration for the API test flow.
+// Config is the struct for configuration
 type Config struct {
-	IsTerminalOutput      bool         // IsTerminalOutput is whether the output is terminal.
-	IsFileOutput          bool         // IsFileOutput is weather the output is file.
-	FilePath              string       // FilePath is the path to the file.
-	ColoredTerminalOutput bool         // ColoredTerminalOutput is whether the terminal output is colored.
-	Format                OutputFormat // Format is the output format.
+	Level        OutputLevel // Level is the output level
+	IsNeedResult bool        // IsNeedResult is the flag to show the API result
 }
 
-// Instance is a struct that holds the configuration for the API test flow.
+// Instance is the struct for the test instance
 type Instance struct {
-	Server *httptest.Server // Server is the HTTP server that serves the API.
-	Mux    *http.ServeMux   // Mux is the HTTP request multiplexer.
-	Cases  *TestCases       // Cases is the result of all test cases.
-	Config Config           // Config is the configuration for the API test flow.
+	Server           *httptest.Server // Server is the HTTP test server
+	Mux              *http.ServeMux   // Mux is the HTTP server multiplexer
+	Cases            *TestCases       // Cases is the test cases
+	Config           Config           // Config is the configuration
+	TotalCases       int64            // TotalCases is the total number of test cases
+	TotalFailedCases int64            // TotalFailedCases is the total number of failed test cases
+	TotalPassedCases int64            // TotalPassedCases is the total number of passed test cases
+	IsNeedExit       bool             // IsNeedExit is the flag to exit the test
 }

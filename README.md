@@ -76,10 +76,12 @@ func main() {
 
 	// Add test cases
 	for _, tc := range testCases {
-		err := instance.Add(tc)
+		result, err := instance.Add(tc)
 		if err != nil {
 			panic(err)
 		}
+
+        fmt.Printf("%s\n", result.ResultGot)
 	}
 
 	// Dump test cases

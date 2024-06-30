@@ -112,7 +112,7 @@ func (h *TestCases) iterate() <-chan TestCases {
 }
 
 // Add is the function to add test case.
-func (h *Instance) Add(testCase TestCase) error {
+func (h *Instance) Add(testCase TestCase) (*TestCases, error) {
 	var param = ""
 	var body io.Reader
 
@@ -125,7 +125,7 @@ func (h *Instance) Add(testCase TestCase) error {
 	if testCase.BodyParams != nil {
 		jsonBytes, err := json.Marshal(testCase.BodyParams)
 		if err != nil {
-			return err
+			return nil, err
 		}
 
 		body = bytes.NewBufferString(string(jsonBytes))
@@ -135,7 +135,7 @@ func (h *Instance) Add(testCase TestCase) error {
 	url := h.Server.URL + testCase.EndPoint + param
 	req, err := http.NewRequest(testCase.Method, url, body)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	// Set body type
@@ -155,13 +155,13 @@ func (h *Instance) Add(testCase TestCase) error {
 
 	res, err := http.DefaultClient.Do(req)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	endTime := time.Now()
 	duration := endTime.Sub(startTime)
 
 	if res == nil {
-		return errors.New("response is nil")
+		return nil, errors.New("response is nil")
 	}
 
 	defer func(Body io.ReadCloser) {
@@ -173,25 +173,25 @@ func (h *Instance) Add(testCase TestCase) error {
 
 	resGot, err := io.ReadAll(res.Body)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	// Insert test case result
-	return h.Cases.insert(
-		TestCases{
-			ResultGot:           string(resGot),
-			StatusGot:           res.Status,
-			StatusCodeGot:       res.StatusCode,
-			ProtoGot:            res.Proto,
-			ProtoMajorGot:       res.ProtoMajor,
-			ProtoMinorGot:       res.ProtoMinor,
-			ContentLengthGot:    res.ContentLength,
-			TransferEncodingGot: res.TransferEncoding,
-			IsUncompressed:      res.Uncompressed,
-			TLSGot:              res.TLS,
-			Time:                duration,
-			Case:                testCase,
-			Next:                nil,
-		},
-	)
+	caseResult := TestCases{
+		ResultGot:           string(resGot),
+		StatusGot:           res.Status,
+		StatusCodeGot:       res.StatusCode,
+		ProtoGot:            res.Proto,
+		ProtoMajorGot:       res.ProtoMajor,
+		ProtoMinorGot:       res.ProtoMinor,
+		ContentLengthGot:    res.ContentLength,
+		TransferEncodingGot: res.TransferEncoding,
+		IsUncompressed:      res.Uncompressed,
+		TLSGot:              res.TLS,
+		Time:                duration,
+		Case:                testCase,
+		Next:                nil,
+	}
+
+	return &caseResult, h.Cases.insert(caseResult)
 }
